@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import java.util.*;
+
 public class Gmail extends Email {
     private int inboxCapacity;
     private Queue<Mail> inbox;
@@ -19,7 +21,6 @@ public class Gmail extends Email {
 
     public void receiveMail(Date date, String sender, String message) {
         if (inbox.size() >= inboxCapacity) {
-            // Move the oldest mail in the inbox to trash
             trash.add(inbox.poll());
         }
         inbox.add(new Mail(date, sender, message));
