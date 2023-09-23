@@ -10,10 +10,15 @@ import java.util.Comparator;
 
 import java.util.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.time.LocalTime;
+
 public class Workspace extends Gmail {
     private ArrayList<Meeting> calendar;
 
     public Workspace(String emailId) {
+        // By default, set the inbox capacity to the maximum value an integer can store
         super(emailId, Integer.MAX_VALUE);
         calendar = new ArrayList<>();
     }
@@ -23,6 +28,7 @@ public class Workspace extends Gmail {
     }
 
     public int findMaxMeetings() {
+        // Sort the meetings by end time
         calendar.sort(Comparator.comparing(Meeting::getEndTime));
 
         int maxMeetings = 0;

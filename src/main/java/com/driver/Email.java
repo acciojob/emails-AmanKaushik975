@@ -7,9 +7,9 @@ public class Email {
     private String emailId;
     private String password;
 
-    public Email(String emailId){
+    public Email(String emailId) {
         this.emailId = emailId;
-        this.password = "Accio@123";
+        this.password = "Accio@123"; // Default password
     }
 
     public String getEmailId() {
@@ -20,13 +20,20 @@ public class Email {
         return password;
     }
 
-    public void changePassword(String oldPassword, String newPassword){
-        if (oldPassword.equals(password) && isPasswordValid(newPassword)) {
-            this.password = newPassword;
-            System.out.println("Password changed successfully.");
-        } else {
-            System.out.println("Password change failed. Please make sure the old password is correct and the new password meets the criteria.");
+    public boolean changePassword(String oldPassword, String newPassword) {
+        // Check if the old password matches the current password
+        if (!oldPassword.equals(password)) {
+            return false; // Password change failed, old password is incorrect
         }
+
+        // Check if the new password meets the specified criteria
+        if (!isPasswordValid(newPassword)) {
+            return false; // Password change failed, new password does not meet criteria
+        }
+
+        // Update the password
+        this.password = newPassword;
+        return true; // Password change successful
     }
 
     private boolean isPasswordValid(String newPassword) {

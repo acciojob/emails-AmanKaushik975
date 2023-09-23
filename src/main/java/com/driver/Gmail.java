@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import java.util.*;
+
 
 public class Gmail extends Email {
     private int inboxCapacity;
@@ -21,41 +21,36 @@ public class Gmail extends Email {
 
     public void receiveMail(Date date, String sender, String message) {
         if (inbox.size() >= inboxCapacity) {
+            // Inbox is full, move the oldest mail to trash
             trash.add(inbox.poll());
         }
         inbox.add(new Mail(date, sender, message));
     }
 
     public void deleteMail(String message) {
-        Mail mailToRemove = inbox.stream()
-                .filter(mail -> mail.getMessage().equals(message))
-                .findFirst()
-                .orElse(null);
-
-        if (mailToRemove != null) {
-            inbox.remove(mailToRemove);
-            trash.add(mailToRemove);
-        }
+        // Search for the message in the inbox and move it to trash if found
+        inbox.removeIf(mail -> mail.getMessage().equals(message));
     }
 
     public String findLatestMessage() {
         if (inbox.isEmpty()) {
-            return null;
+            return null; // Inbox is empty
         }
-        return inbox.peek().getMessage();
+        return inbox.peek().getMessage(); // Latest message is at the front of the inbox
     }
 
     public String findOldestMessage() {
         if (inbox.isEmpty()) {
-            return null;
+            return null; // Inbox is empty
         }
-        return inbox.toArray(new Mail[0])[inbox.size() - 1].getMessage();
+        return inbox.toArray(new Mail[0])[inbox.size() - 1].getMessage(); // Oldest message is at the back of the inbox
     }
 
     public int findMailsBetweenDates(Date start, Date end) {
         int count = 0;
         for (Mail mail : inbox) {
-            if (mail.getDate().compareTo(start) >= 0 && mail.getDate().compareTo(end) <= 0) {
+            Date mailDate = mail.getDate();
+            if (mailDate.compareTo(start) >= 0 && mailDate.compareTo(end) <= 0) {
                 count++;
             }
         }
@@ -71,7 +66,7 @@ public class Gmail extends Email {
     }
 
     public void emptyTrash() {
-        trash.clear();
+        trash.clear(); // Clear all mails in the trash
     }
 
     public int getInboxCapacity() {
@@ -80,12 +75,12 @@ public class Gmail extends Email {
 
     private static class Mail {
         private Date date;
-        private String sender;
+        private String senderId;
         private String message;
 
-        public Mail(Date date, String sender, String message) {
+        public Mail(Date date, String senderId, String message) {
             this.date = date;
-            this.sender = sender;
+            this.senderId = senderId;
             this.message = message;
         }
 
@@ -93,8 +88,8 @@ public class Gmail extends Email {
             return date;
         }
 
-        public String getSender() {
-            return sender;
+        public String getSenderId() {
+            return senderId;
         }
 
         public String getMessage() {
